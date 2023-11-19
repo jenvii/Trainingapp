@@ -1,39 +1,52 @@
+import { useState } from "react";
 import { Button } from "@mui/material";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import { useState } from "react"
 
-export default function AddCustomer(props) {
+export default function EditCustomer(props) {
     // states
     const [customer, setCustomer] = useState({ firstname: '', lastname: '', streetaddress: '', postcode: '', city: '', email: '', phone: '' });
     const [open, setOpen] = useState(false);
 
-    //functions
+    // functions
+    const handleInputChange = (event) => {
+        setCustomer({ ...customer, [event.target.name]: event.target.value });
+    }
+
+    const handleOpen = () => {
+        setOpen(true);
+        setCustomer({
+            firstname: props.params.data.firstname,
+            lastname: props.params.data.lastname,
+            streetaddress: props.params.data.streetaddress,
+            postcode: props.params.data.postcode,
+            city: props.params.data.city,
+            email: props.params.data.email,
+            phone: props.params.data.phone
+        })
+    }
+
     const handleClose = (event, reason) => {
         if (reason != 'backdropClick') {
             setOpen(false);
         }
     }
 
-    const handleInputChange = (event) => {
-        setCustomer({ ...customer, [event.target.name]: event.target.value });
-    }
-
-    const saveCustomer = () => {
-        props.addCustomer(customer);
+    const handleSave = () => {
+        console.log(props.params.data.links[0].href)
+        props.updateCustomer(props.params.data.links[0].href, customer);
         setOpen(false);
     }
 
-    //return
     return (
         <>
             <Button
-                onClick={() => setOpen(true)}>
-                New Customer
+                onClick={handleOpen}>
+                Edit customer
             </Button>
             <Dialog
                 open={open}
                 onClose={handleClose}>
-                <DialogTitle>New Customer</DialogTitle>
+                <DialogTitle>Edit Customer</DialogTitle>
                 <DialogContent>
                     <TextField
                         label='First name'
@@ -87,8 +100,8 @@ export default function AddCustomer(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={saveCustomer}>
-                        Add customer
+                        onClick={handleSave}>
+                        Edit customer
                     </Button>
                     <Button
                         onClick={handleClose}>
