@@ -40,7 +40,8 @@ export default function EditCustomer(props) {
     return (
         <>
             <Button
-                onClick={handleOpen}>
+                onClick={handleOpen}
+                color="secondary">
                 Edit customer
             </Button>
             <Dialog

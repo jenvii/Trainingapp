@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import AddCustomer from './AddCustomer';
 import { Button } from "@mui/material";
 import EditCustomer from './EditCustomer';
+import "../styles.css";
 
 export default function CustomerList() {
 
@@ -17,7 +18,7 @@ export default function CustomerList() {
 
     // functions
     const getCustomers = () => {
-        fetch(RESTURL)
+        fetch('https://traineeapp.azurewebsites.net/api/customers')
             .then(response => response.json())
             .then(responseData => {
                 setCustomers(responseData.content)
@@ -26,7 +27,7 @@ export default function CustomerList() {
     }
 
     const addCustomer = (customer) => {
-        fetch(RESTURL, {
+        fetch('https://traineeapp.azurewebsites.net/api/customers', {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify(customer)
@@ -81,13 +82,13 @@ export default function CustomerList() {
 
     //columns for grid
     const columns = [
-        { field: "firstname", sortable: true, filter: true, floatingFilter: true, resizable: true },
-        { field: "lastname", sortable: true, filter: true, floatingFilter: true, resizable: true },
-        { field: "streetaddress", sortable: true, filter: true, floatingFilter: true, resizable: true },
-        { field: "postcode", sortable: true, filter: true, floatingFilter: true, resizable: true },
-        { field: "city", sortable: true, filter: true, floatingFilter: true, resizable: true },
-        { field: "email", sortable: true, filter: true, floatingFilter: true, resizable: true },
-        { field: "phone", sortable: true, filter: true, floatingFilter: true, resizable: true },
+        { field: "firstname", sortable: true, filter: true, floatingFilter: true },
+        { field: "lastname", sortable: true, filter: true, floatingFilter: true },
+        { field: "streetaddress", sortable: true, filter: true, floatingFilter: true },
+        { field: "postcode", sortable: true, filter: true, floatingFilter: true },
+        { field: "city", sortable: true, filter: true, floatingFilter: true },
+        { field: "email", sortable: true, filter: true, floatingFilter: true },
+        { field: "phone", sortable: true, filter: true, floatingFilter: true },
         { cellRenderer: params => <EditCustomer updateCustomer={updateCustomer} params={params} /> },
         {
             cellRenderer: params =>
@@ -111,15 +112,17 @@ export default function CustomerList() {
                 onClick={exportCsv}>
                 Download CSV Export File
             </Button>
-            <div className="ag-theme-material" style={{ height: '700px', width: '90%', margin: 'auto' }}>
+            <div className="ag-theme-material">
                 <AgGridReact
                     rowData={customers}
                     columnDefs={columns}
                     ref={gridRef}
+                    pagination={true}
+                    paginationAutoPageSize={true}
                 >
 
                 </AgGridReact>
-            </div >
+            </div>
         </>
     )
 }

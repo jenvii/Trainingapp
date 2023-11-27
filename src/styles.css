@@ -1,0 +1,17 @@
+.calendar {
+    height: 15px;
+}
+
+.ag-theme-material {
+    --ag-grid-size: 7px;
+    height: 80ch;
+    width: 90%;
+    margin: auto;
+}
+
+.chart {
+    margin: auto;
+    width: 800px;
+    height: fit-content;
+    padding-top: 5%;
+}

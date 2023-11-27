@@ -4,7 +4,8 @@ import { useState } from "react"
 
 export default function AddCustomer(props) {
     // states
-    const [customer, setCustomer] = useState({ firstname: '', lastname: '', streetaddress: '', postcode: '', city: '', email: '', phone: '' });
+    const emptyCustomer = { firstname: '', lastname: '', streetaddress: '', postcode: '', city: '', email: '', phone: '' };
+    const [customer, setCustomer] = useState(emptyCustomer);
     const [open, setOpen] = useState(false);
 
     //functions
@@ -18,8 +19,13 @@ export default function AddCustomer(props) {
         setCustomer({ ...customer, [event.target.name]: event.target.value });
     }
 
+    const resetForm = () => {
+        setCustomer(emptyCustomer);
+    }
+
     const saveCustomer = () => {
         props.addCustomer(customer);
+        resetForm();
         setOpen(false);
     }
 
