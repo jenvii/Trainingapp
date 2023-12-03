@@ -75,7 +75,8 @@ export default function CustomerList() {
     // asiakkaan poistoon tarvittava DELETE fetch
     const deleteCustomer = (params) => {
         if (window.confirm('Are you sure that you want to delete this customer?')) {
-            fetch(params.data.links[0].href, { method: 'DELETE' })
+            const customerId = params.data.links[0].href.split('/').pop();
+            fetch(`https://traineeapp.azurewebsites.net/api/customers/${customerId}`, { method: 'DELETE' })
                 .then(respone => {
                     if (respone.ok) {
                         fetchCustomers();

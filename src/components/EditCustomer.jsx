@@ -29,7 +29,8 @@ export default function EditCustomer(props) {
 
     // funktio asiakkaan tietojen tallentamiseen
     const handleSave = () => {
-        props.updateCustomer(props.params.data.links[0].href, customer);
+        const customerId = props.params.data.links[0].href.split('/').pop();
+        props.updateCustomer(`https://traineeapp.azurewebsites.net/api/customers/${customerId}`, customer);
         setOpen(false);
     }
 
