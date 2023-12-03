@@ -3,15 +3,12 @@ import { Button } from "@mui/material";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 
 export default function EditCustomer(props) {
-    // states
+
+    // statet asiakkaalle ja dialogin avaamiseen
     const [customer, setCustomer] = useState({ firstname: '', lastname: '', streetaddress: '', postcode: '', city: '', email: '', phone: '' });
     const [open, setOpen] = useState(false);
 
-    // functions
-    const handleInputChange = (event) => {
-        setCustomer({ ...customer, [event.target.name]: event.target.value });
-    }
-
+    // funktio dialogin avaamiseen, jossa asiakkaan tiedot ovat valmiina tekstikentissä
     const handleOpen = () => {
         setOpen(true);
         setCustomer({
@@ -25,18 +22,26 @@ export default function EditCustomer(props) {
         })
     }
 
+    // funktio tekstikenttien muutoksille
+    const handleInputChange = (event) => {
+        setCustomer({ ...customer, [event.target.name]: event.target.value });
+    }
+
+    // funktio asiakkaan tietojen tallentamiseen
+    const handleSave = () => {
+        props.updateCustomer(props.params.data.links[0].href, customer);
+        setOpen(false);
+    }
+
+    // funktio dialogin sulkemiseen
     const handleClose = (event, reason) => {
         if (reason != 'backdropClick') {
             setOpen(false);
         }
     }
 
-    const handleSave = () => {
-        console.log(props.params.data.links[0].href)
-        props.updateCustomer(props.params.data.links[0].href, customer);
-        setOpen(false);
-    }
-
+    // return, joka palauttaa napin, jota painamalla 
+    // aukeaa asiakkaan tietojen muokkausnäkymä
     return (
         <>
             <Button
@@ -101,10 +106,12 @@ export default function EditCustomer(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button
+                        color="success"
                         onClick={handleSave}>
                         Edit customer
                     </Button>
                     <Button
+                        color="error"
                         onClick={handleClose}>
                         Close
                     </Button>

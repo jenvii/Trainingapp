@@ -9,19 +9,17 @@ import "../styles.css";
 
 export default function Training() {
 
-    // states
-    const [training, setTraining] = useState('');
-    const [customer, setCustomer] = useState('');
+    // statet treeneille ja asiakkaille
     const [trainings, setTrainings] = useState([]);
     const [customers, setCustomers] = useState([]);
 
 
-    // columns for grid
+    // ag-grid:n sarakkeiden sisällöt, toiminnallisuudet ja leveydet
     const columns = [
-        { field: "date", sortable: true, filter: true, floatingFilter: true, valueFormatter: params => dayjs(params.value).format("DD.MM.YY hh.mm") },
-        { field: "duration", sortable: true, filter: true, floatingFilter: true },
-        { field: "activity", sortable: true, filter: true, floatingFilter: true },
-        { headerName: "Customer", field: "customer.firstname", valueGetter: (params) => `${params.data.customer.firstname} ${params.data.customer.lastname}` },
+        { field: "date", sortable: true, filter: true, floatingFilter: true, valueFormatter: params => dayjs(params.value).format("DD.MM.YYYY HH:mm"), width: 160 },
+        { field: "duration", sortable: true, filter: true, floatingFilter: true, width: 130 },
+        { field: "activity", sortable: true, filter: true, floatingFilter: true, width: 140 },
+        { headerName: "Customer", field: "customer.firstname", valueGetter: (params) => `${params.data.customer.firstname} ${params.data.customer.lastname}`, width: 150 },
         {
             cellRenderer: params =>
                 <Button
@@ -34,7 +32,7 @@ export default function Training() {
 
     ]
 
-    // fetching trainings
+    // treenien ja niiden asiakkaiden haku
     const fetchTrainings = () => {
         fetch('https://traineeapp.azurewebsites.net/gettrainings')
             .then(response => {
@@ -48,10 +46,13 @@ export default function Training() {
             .catch(err => console.error("There is an error with fetch: " + err))
     }
 
+    // treenien haun kutsu
     useEffect(() => {
         fetchTrainings();
     }, [])
 
+
+    // uuden treenin lisäämiseen tarvittava POST fetch
     const addTraining = (training) => {
         fetch('https://traineeapp.azurewebsites.net/api/trainings', {
             method: 'POST',
@@ -62,12 +63,13 @@ export default function Training() {
                 if (response.ok) {
                     fetchTrainings();
                 } else {
-                    alert("Something went wrong")
+                    alert("Something went wrong with adding a new training")
                 }
             })
             .catch(err => console.error(err));
     }
 
+    // treenien poistamiseen tarvittava DELETE fetch
     const deleteTraining = (params) => {
         if (window.confirm('Are you sure you want to delete this training?')) {
             fetch(`https://traineeapp.azurewebsites.net/api/trainings/${params.data.id}`, { method: 'DELETE' })
@@ -82,6 +84,7 @@ export default function Training() {
         }
     }
 
+    // haetaan asiakkaat erikseen uuden treenin lisäämistä varten
     const getCustomers = () => {
         fetch('https://traineeapp.azurewebsites.net/api/customers')
             .then(response => response.json())
@@ -91,10 +94,13 @@ export default function Training() {
             .catch(err => console.error(err))
     }
 
+    // asiakkaiden haun kutsu
     useEffect(() => {
         getCustomers();
     }, [])
 
+    // return, joka palauttaa uuden treenin lisäämiseen napin sekä 
+    // ag-gridin, jossa treenien tiedot näkyvät käyttäjälle
     return (
         <>
             <AddTraining addTraining={addTraining} customers={customers} />

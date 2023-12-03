@@ -4,7 +4,7 @@
 
 .ag-theme-material {
     --ag-grid-size: 7px;
-    height: 80ch;
+    height: 70ch;
     width: 90%;
     margin: auto;
 }
@@ -14,4 +14,9 @@
     width: 800px;
     height: fit-content;
     padding-top: 5%;
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: space-between;
 }

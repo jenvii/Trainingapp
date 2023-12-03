@@ -8,11 +8,12 @@ import "../styles.css";
 
 export default function Calendar() {
 
+    // statet treeneille
     const [trainings, setTrainings] = useState([]);
 
-    // fetching trainings
+    // haetaan treenit ja niiden asiakkaat
     const fetchTrainings = () => {
-        fetch('https://traineeapp.azurewebsites.net/api/trainings')
+        fetch('https://traineeapp.azurewebsites.net/gettrainings')
             .then(response => {
                 if (response.ok) {
                     return response.json();
@@ -20,24 +21,30 @@ export default function Calendar() {
                     throw new Error("Error in fetch: " + response.statusText);
                 }
             })
-            .then(data => setTrainings(data.content))
+            .then(data => setTrainings(data))
             .catch(err => console.error("There is an error with fetch: " + err))
     }
 
+    // kutsutaan treenien hakua
     useEffect(() => {
         fetchTrainings();
     }, [])
 
+    // määritellään kalenteriin tulevat tapahtumat 
+    // ja niiden alkamis- ja päättymisajat
     const events = trainings.map(training => ({
-        title: training.activity,
-        start: dayjs(training.date).format('YYYY-MM-DD HH:mm:ss'),
-        end: dayjs(training.date).add(training.duration, 'minutes').format('YYYY-MM-DD HH:mm:ss')
+        title: training.activity + " / " + training.customer.firstname + " " + training.customer.lastname,
+        start: dayjs(training.date).format('YYYY-MM-DD HH:mm'),
+        end: dayjs(training.date).add(training.duration, 'minutes').format('YYYY-MM-DD HH:mm')
     }))
 
+    // return, joka palauttaa kalenterinäkymän, jossa näkyy treenit 
+    // niiden oikeina ajankohtina, ja treeniin kuuluva asiakas
     return (
         <>
             <FullCalendar
                 events={events}
+                firstDay={1}
                 height="33em"
                 plugins={[dayGridPlugin, timeGridPlugin]}
                 initialView="dayGridMonth"

@@ -4,8 +4,11 @@ import _ from 'lodash';
 
 export default function Chart() {
 
+    // state diagrammiin tulevalle datalle
     const [chartData, setChartData] = useState([]);
 
+    // haetaan treenit ja niiden asiakkaat, 
+    // sekä ryhmitellään ja summataan data diagrammiin sopivaksi
     const fetchTrainings = () => {
         fetch('https://traineeapp.azurewebsites.net/gettrainings')
             .then(response => {
@@ -23,10 +26,13 @@ export default function Chart() {
             .catch(err => console.error("There is an error with fetch: " + err))
     }
 
+    // kutsutaan treenien hakua
     useEffect(() => {
         fetchTrainings();
     }, [])
 
+    // return, joka palauttaa pylväsdiagrammin, jossa näkyy 
+    // kuinka monta minuuttia tiettyä aktiviteettia on varattu yhteensä
     return (
         <>
             <div className="chart">

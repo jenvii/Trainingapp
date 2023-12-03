@@ -1,5 +1,5 @@
-import Training from './components/Training';
-import CustomerList from './components/Customer';
+import Training from './components/TrainingList';
+import CustomerList from './components/CustomerList';
 import Calendar from './components/Calendar';
 import Chart from './components/Chart';
 import { Tab, Tabs } from "@mui/material";
@@ -7,12 +7,16 @@ import { useState } from 'react';
 
 function App() {
 
+  // state navigaation arvolle, eli sille, mikä sivu näkyy
   const [value, setValue] = useState('CustomerList');
 
+  // funktio, joka hoitaa sivun vaihdon
   const handleChange = (event, value) => {
     setValue(value);
   }
 
+  // return, joka näyttää sivun yläreunassa navigaation, 
+  // jonka avulla eri sivuille siirrytään
   return (
     <>
       <Tabs value={value} onChange={handleChange}>
